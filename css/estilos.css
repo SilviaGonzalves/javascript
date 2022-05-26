@@ -1,0 +1,5 @@
+/*  con font-size 62.5 tengo que 1 rem = 10 px, en vez de 16px por default*/
+*{  
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,213 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.contenedorGeneral{ 
+    /* width: 100%; */
+    max-width: 1000px;
+    /* height: 100%; */
+    max-height: 1850px; 
+    margin: auto;
+    font-family: 'Dancing Script', cursive; 
+    font-size:62.5%;
+    position: relative; 
+    /* background-image: url("../multimedia/fotofondobelen.jpg"); */
+    /* opacity: 0.6; */
+    /* object-fit: contain; */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+  background-color: red;
+    
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr 3fr 2fr 1fr 1fr;
+    border: 5px solid chartreuse; 
+    /* background-repeat: no-repeat;
+    background-size: cover; */
+    grid-template-areas: 
+    "header"
+    "iframe"
+    "parrafo1"
+    "parrafo2"
+    "encuesta"
+    "footer";
+    /* overflow-y: scroll; */
+}
+
+.fotoFondo{
+    display: block; 
+    position: absolute;
+    margin: auto;
+    
+    /* filter:opacity(155%); */
+    opacity: 0.6;
+}
+    */
+
+header{ 
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.header .logo_img{  
+    position: relative;
+    width: 120px;
+    height: 120px;
+    text-align: center;
+    background-size: cover;
+}
+.header nav {  
+    position: relative;
+    width: 700px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center; 
+    flex-wrap: wrap;   
+}
+
+.header nav a{  
+    position: relative;
+    text-shadow: -2px 2px 7px #000;
+    font-size: 1.5rem;
+    text-decoration: none;
+    display: flex; 
+    flex-direction: row;
+    padding: 10px;
+}
+.header nav a:hover{  
+    background-color: rgb(243, 166, 224);
+}
+.iframe{ 
+    position: relative;
+    height: 370px;
+    width: 400px;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 100px;
+    border: #000 0.2rem solid;
+    
+}
+.Parrafo{  
+    position: relative;
+    padding: 20px;
+  
+}
+.Parrafo header{   
+    padding: 30px; 
+    font-size: 1rem;
+}
+.Parrafo .Parrafo__p{
+    background-color: rgba(246, 244, 241, 0.4);
+}
+.Parrafo .Parrafo__p p{ 
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    line-height: 20px;
+    text-align: justify;
+ 
+}
+
+.encuesta{  
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;    
+    justify-content: space-between;
+    align-items: center;
+}
+.encuesta .encuesta__titulo{   
+    padding: 20px;
+    font-size: 2rem;
+
+}
+.encuesta a{   
+    background-color: aquamarine;
+    color: black; 
+    
+    font-size: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 200px;
+    text-decoration: none;
+    text-align: center;
+    line-height: 30px;
+    
+    height: 40px;
+    border-color:rgb(243, 166, 224);
+    border-style: solid;
+    margin-right: 300px;
+}
+.footer{    
+    position: relative;
+    background-color: rgb(246, 244, 241, 0.4);
+    height: 100px;
+
+}
+.footer__ppal{ 
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.footer__ppal p{ 
+    font-size: 1.5rem;
+    color: black;
+}
+.footer__contacto{  
+    width: 120px;
+    height: 50px;
+}
+.footer__ppal .footer__contacto a{ 
+    background-color: aquamarine;
+    color: black; 
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    /* width: 200px; */
+    text-decoration: none;
+    text-align: center;
+    line-height: 30px;
+    
+    height: 40px;
+    border-color:rgb(243, 166, 224);
+    border-style: solid;
+    
+    color: black;
+    line-height: 30px;
+    text-align: center;
+}
+.footer__leyendas{  
+    width: 150px;
+    height: 60px;
+    /* line-height: 10px; */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.footer__leyendas p{    
+    font-size: 1.5rem;
+    color: black;
+}
+/* .footer__leyendas .iconos{  
+    width: 150px;
+    height: 60px;
+    text-align: center;
+    margin-top: 20px;
+} */
+
+.iconos a{  
+    padding: 10px;
+   
+}
+.icon-facebook, .icon-instagram, .icon-linkedin{ 
+    padding-top: 10px;
+    font-size: 25px;
+    color: black;
+}
