@@ -49,7 +49,7 @@ h1 {
     flex-direction: row;
     justify-content: space-between;
     align-items: center; */
-    width: 60%;
+    width: 55%;
     font-size: 4rem;
 }
 .leyendaPpal{
@@ -102,6 +102,28 @@ h1 {
     border: 3px solid rgb(184, 88, 152);
     margin-top: 80px;
 }
+/* .saludoF{
+    background-color: white;
+    color: #000;
+    width: 700px;
+    height: 300px;
+    border: 3px solid rgb(184, 88, 152);
+    margin-top: 20px;
+} */
+.formulario{
+    position: relative;
+    background-color: white;
+    color: #000;
+    width: 600px;
+    height: 300px;
+    border: 4px solid rgb(184, 88, 152);
+    margin-top: 20px;
+    padding: 20px;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .5s; */
+}
 .campoNumerico {
     width: 100px;
     background-color: #cecac5;
@@ -129,7 +151,7 @@ h1 {
 }
 
 
-.modal-contenedor{
+.modal-contenedor, .modal-contenedorE{
     position: fixed;
     top: 0;
     width: 100%;
@@ -142,7 +164,7 @@ h1 {
     opacity: 0;
     visibility: hidden;
 }
-.modal-contenedorE{
+.form-contenedor{
     position: fixed;
     top: 0;
     width: 100%;
@@ -155,7 +177,6 @@ h1 {
     opacity: 0;
     visibility: hidden;
 }
-
 .modal-active {
     opacity: 1;
     visibility: visible;
@@ -188,7 +209,16 @@ h1 {
     border: none;
     background-color: white;
 }
-.modal-carritoE {
+/* .saludo-final #saludo-cerrar{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 20px;
+    color: rgb(32, 9, 14);
+    border: none;
+    background-color: white;
+} */
+.modal-carritoE{
     position: relative;
     min-width: 400px;
     padding: 20px;
@@ -200,6 +230,18 @@ h1 {
     background-color: white;
     transition:all .5s;
 }
+/* .saludo-final{
+    position: relative;
+    min-width: 400px;
+    padding: 20px;
+    top: 15px;
+    right: 15px;
+    font-size: 20px;
+    color: rgb(225, 65, 100);
+    border: none;
+    background-color: white;
+    transition:all .5s;
+} */
 .modal-carritoE #carritoCerrarE{
     position: absolute;
     top: 15px;
@@ -227,7 +269,7 @@ h1 {
 }
 
 .productoEnCarrito {
-    border-left: 5px solid rgb(184, 88, 152);;
+    border-left: 5px solid rgb(184, 88, 152);
     border-bottom-left-radius: 3px;
     border-top-left-radius: 3px;
     margin: 5px 0;
@@ -244,6 +286,14 @@ h1 {
     color: red;
     border: none;
     font-size: 20px;
+    float: left;
+}
+#confirmaPedido {
+    background-color: white;
+    color: black;
+    border: none;
+    font-size: 25px;
+    float: right;
 }
 
 .boton-eliminar:hover {
@@ -253,10 +303,12 @@ h1 {
     outline: none;
 }
 
-
-
-
-
+#inputNombre, #inputDireccion{
+    background-color:rgb(231, 207, 223);
+}
+.btnF{
+    margin-top: 30px;
+}
 
 
 

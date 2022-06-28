@@ -1,21 +1,23 @@
-//  Luis, hay varios errores que tengo que corregir
-//  pero me van a llevar tiempo y quiero cumplir con 
-//  las entregas.
-//  Faltan terminar la parte donde se pide que apruebe
-//  el pedido y si contesta que si, sale el mensaje que 
-//  en las próximas 72 horas lo va a estar recibiendo.
-//  Errores detectados:
-//  1- Solo ingresa al carrito cuando se presiona Enter
-//     y no cuando se termina de poner una cantidad, el 
-//     error es que si escribe en varios productos la
-//     cantidad y no presiona Enter no lo sube al carrito.
-//  2- Cuando se dan de baja algun producto del carrito y
-//     es la última operación queda en el carrito con cantidad
-//     = 0.
-//  Voy a tratar de hacer que se coloque la cantidad y abajo
-//  mostrar un carrito para que agregue y un tachito de basura
-//  para limpiar ese producto porque no me gusta como se ve.
-//  Gracias por tu ayuda
+//  Luis, cuento hasta donde llegué:
+//  Puedo subir al carrito, borrar, y mostrar el resultado
+//  final, limpiando los input.
+//  Puedo mostrar un formulario para que ingrese el nombre
+//  y dirección,pero de ahi en adelante no logro mostrar el 
+//  mensaje de error si no ingresan alguno de los input, creo
+//  que debe ser el tema de la visibility que no manejo muy
+//  bien y otra cosa que no me sale es el saludo final que 
+//  intento hacerlo con un modal como los otros pero no lo 
+//  puedo mostrar.
+//  Tampoco pude mostrar un modal con un saludo final,traté de
+//  hacerlo con sweetalert como mostró Enzo en el after pero se
+//  va rápido y no lo deja hasta que se apriete el ok, para cerrar.
+//
+//  Te mando hasta acá por el límite de tiempo del desafío, pero
+//  esta verde todavía para que quede bien, quisiera haber
+//  entregado todo bien, pero cada cosa la tengo que probar y
+//  cuesta un poco.
+//  Muchas gracias por todo.
+//
 
 
 let productos =[
@@ -51,37 +53,49 @@ const contenedorProductos = document.querySelector("#contenedor-productos")
 const cant = document.querySelector("#cantidad")
 const contadorCarrito = document.querySelector("#contadorCarrito")
 
-
+//  decl. selectore modal carrito
 const contenedorModal = document.getElementsByClassName('modal-contenedor')[0]
-const contenedorModalE = document.getElementsByClassName('modal-contenedorE')[0]
 const botonAbrir = document.getElementById('boton-carrito')
-const botonAgregarCarrito = document.getElementById('boton-agregar-carrito')
 const botonCerrar = document.getElementById('carritoCerrar')
-const botonCerrarE = document.getElementById('carritoCerrarE')
 const modalCarrito = document.getElementsByClassName('modal-carrito')[0]
-const modalCarritoE = document.getElementsByClassName('modal-carritoE')[0]
 const carritoContenedor = document.querySelector('#carrito-contenedor')
 const precioTotal = document.querySelector('#precioTotal')
 const btnVaciar = document.getElementById('vaciarCarrito')
+const confPedido = document.getElementById('confirmaPedido')
 
 
+// decl. selectores modal de Error
+
+const contenedorModalE = document.getElementsByClassName('modal-contenedorE')[0]
+const modalCarritoE = document.getElementsByClassName('modal-carritoE')[0]
+const botonCerrarE = document.getElementById('carritoCerrarE')
 const carritoContenedorE = document.querySelector('#carrito-contenedorE')
 
 
+// decl. selector formulario pedido y saludo final
+const formPedido = document.querySelector('#form-pedido')
+const formContenedor = document.getElementsByClassName('form-contenedor')[0]
+
+
+
+
+
+
+// eventos
 botonAbrir.addEventListener('click', ()=>{
     contenedorModal.classList.toggle('modal-active')
 })
 botonCerrar.addEventListener('click', ()=>{
     contenedorModal.classList.toggle('modal-active')
 })
-botonCerrarE.addEventListener('click', ()=>{
-    contenedorModalE.classList.toggle('modal-active')
-})
 contenedorModal.addEventListener('click', ()=>{
     botonCerrar.click()
 })
 modalCarrito.addEventListener('click', (event)=>{
     event.stopPropagation()
+})
+botonCerrarE.addEventListener('click', ()=>{
+    contenedorModalE.classList.toggle('modal-active')
 })
 
 
@@ -109,14 +123,17 @@ productos.forEach((producto) => {
     let valor = document.getElementById(`${producto.id}`)
 
     valor.addEventListener("keypress" , (e)=>{
+
         if(e.key === "Enter"){
              if (e.target.id === `${producto.id}`){
 
                 agregoProductos( `${producto.id}`, valor.value)
 
+                const limpiar = document.getElementById(producto.id)
+                limpiar.innerHTML = (document.getElementById(producto.id).value = " ");
+                // limpiar.innerHTML = (limpiar.value = " ");
              }
         }
-      
     })
  })
  
@@ -152,11 +169,12 @@ function agregoProductos(item, cantP){
                     carrito.splice(cual,1)
                 }
         } 
-    
+        // console.log(carrito)
         let valor = cantP * registro.precio 
         let cantN = Number(cantP)       
         carrito.push(new Carrito(indice, registro.nombre, cantN, valor))
         muestroCarrito()
+     
     }else{
         mostrarError(1)
     }
@@ -167,9 +185,11 @@ function agregoProductos(item, cantP){
 }}
 
 function mostrarError(codError){
- contenedorModalE.classList.toggle('modal-active')
-    if (codError === 1){
-        carritoContenedorE.innerHTML=`Error: nose encontró el índice`
+ 
+contenedorModalE.classList.toggle('modal-active')
+
+if (codError === 1){
+        carritoContenedorE.innerHTML=`Error: no se encontró el índice`
     
 }else{
     if (codError === 2){
@@ -178,6 +198,10 @@ function mostrarError(codError){
     }else{
         if (codError === 3){
             carritoContenedorE.innerHTML=`Error en splice`
+        }else{
+            if (codError === 4){
+                carritoContenedorE.innerHTML=`Debe ingresar Nombre y/o Direccion`
+            }
         }
     }
 }}
@@ -215,16 +239,19 @@ function muestroCarrito  ()  {
     carritoContenedor.innerHTML = ''
 
     carrito.forEach((item) => {
-        const div = document.createElement('div')
-        div.classList.add('productoEnCarrito')
-    // console.log(carrito)
-        div.innerHTML = `
+        if (item.cantidad !== 0){
+
+            const div = document.createElement('div')
+            div.classList.add('productoEnCarrito')
+
+            div.innerHTML = `
                     <p>${item.nombre}</p>
                     <p>Cantidad: ${item.cantidad}</p>
                     <p>Precio: $${item.valorCompra}</p>
                     `
         
-        carritoContenedor.append(div)
+            carritoContenedor.append(div)
+        }    
     })
     let totalPedido = 0
     carrito.forEach((item) =>{
@@ -240,4 +267,57 @@ function vaciarCarrito () {
  contadorCarrito.innerText = contArt
  muestroCarrito()
 }
+function confirmaPedido(){
+    contenedorModal.classList.toggle('modal-active')
+    formContenedor.classList.toggle('modal-active')
+    modalCarrito.classList.toggle('modal-active')
+    formPedido.innerHTML= ""
+    
+    const form = document.createElement("form")
 
+    form.innerHTML=`
+        <form class="row g-3" >
+            <div class="col-12">
+                <label for="inputNombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control my-2" id="inputNombre" placeholder="Ingrese su Nombre">
+            </div>
+            <div class="col-12">
+                <label for="inputDireccion" class="form-label">Direccion </label>
+                <input type="text" class="form-control my-2" id="inputDireccion" placeholder="Ingrese su direccion">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success" id="btn-confirma" onclick="asentarConfirmacion()">CONFIRMA SU PEDIDO</button>
+            </div>
+        </form>    
+    `
+    formPedido.append(form)
+  
+   
+}
+
+function asentarConfirmacion(){
+    const nombre = document.querySelector('#inputNombre')
+    const direccion = document.querySelector('#inputDireccion')
+    const btnConfirma = document.querySelector('#btn-confirma')
+    formPedido.addEventListener('click', (event)=>{
+        event.stopPropagation()
+    })
+    btnConfirma.addEventListener('click', (e)=>{
+        e.preventDefault();
+    })
+    
+    btnConfirma.addEventListener('click', ()=>{
+        formContenedor.classList.toggle('modal-active')
+    })
+    
+        if ((nombre.value !== "") && (direccion.value !== "")){
+
+
+   Swal.fire("Gracias por tu compra!" ," En el transurso de las próximas 72 hs, llega a tu domicilio" )       
+ 
+        }else{
+
+            mostrarError(4)
+        }
+
+}
