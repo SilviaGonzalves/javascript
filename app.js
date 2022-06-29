@@ -2,20 +2,14 @@
 //  Puedo subir al carrito, borrar, y mostrar el resultado
 //  final, limpiando los input.
 //  Puedo mostrar un formulario para que ingrese el nombre
-//  y dirección,pero de ahi en adelante no logro mostrar el 
-//  mensaje de error si no ingresan alguno de los input, creo
-//  que debe ser el tema de la visibility que no manejo muy
-//  bien y otra cosa que no me sale es el saludo final que 
-//  intento hacerlo con un modal como los otros pero no lo 
-//  puedo mostrar.
-//  Tampoco pude mostrar un modal con un saludo final,traté de
-//  hacerlo con sweetalert como mostró Enzo en el after pero se
-//  va rápido y no lo deja hasta que se apriete el ok, para cerrar.
+//  y dirección.
+//  Si hay algún error lo muestro.
+//  Hice para el saludo final un sweetalert
+//  En el saludo final pude cambiar el if por un operador ternario
+//  Falta:
+//    subir a local storage el carrito
+//    hacer la aplicación responsive
 //
-//  Te mando hasta acá por el límite de tiempo del desafío, pero
-//  esta verde todavía para que quede bien, quisiera haber
-//  entregado todo bien, pero cada cosa la tengo que probar y
-//  cuesta un poco.
 //  Muchas gracias por todo.
 //
 
@@ -190,17 +184,15 @@ contenedorModalE.classList.toggle('modal-active')
 
 if (codError === 1){
         carritoContenedorE.innerHTML=`Error: no se encontró el índice`
-    
 }else{
     if (codError === 2){
         carritoContenedorE.innerHTML=`Debe ingresar un numero`
-       
     }else{
         if (codError === 3){
             carritoContenedorE.innerHTML=`Error en splice`
         }else{
             if (codError === 4){
-                carritoContenedorE.innerHTML=`Debe ingresar Nombre y/o Direccion`
+                carritoContenedorE.innerHTML=`Debe ingresar Nombre y Direccion`
             }
         }
     }
@@ -225,9 +217,7 @@ function limpiarCarrito(){
             if (reg !== -1){
                 carrito.splice(reg,1)
          }}
-
     })
-
 }
 
 
@@ -286,38 +276,26 @@ function confirmaPedido(){
                 <input type="text" class="form-control my-2" id="inputDireccion" placeholder="Ingrese su direccion">
             </div>
             <div class="col-12">
-                <button type="submit" class="btn btn-success" id="btn-confirma" onclick="asentarConfirmacion()">CONFIRMA SU PEDIDO</button>
+                <button type="button" class="btn btn-success" id="btn-confirma" onclick="asentarConfirmacion()" >CONFIRMA SU PEDIDO</button>
             </div>
         </form>    
     `
     formPedido.append(form)
-  
-   
+
 }
 
 function asentarConfirmacion(){
+
+    formContenedor.classList.toggle('modal-active')
     const nombre = document.querySelector('#inputNombre')
     const direccion = document.querySelector('#inputDireccion')
     const btnConfirma = document.querySelector('#btn-confirma')
-    formPedido.addEventListener('click', (event)=>{
-        event.stopPropagation()
-    })
-    btnConfirma.addEventListener('click', (e)=>{
-        e.preventDefault();
-    })
-    
-    btnConfirma.addEventListener('click', ()=>{
-        formContenedor.classList.toggle('modal-active')
-    })
-    
-        if ((nombre.value !== "") && (direccion.value !== "")){
-
-
-   Swal.fire("Gracias por tu compra!" ," En el transurso de las próximas 72 hs, llega a tu domicilio" )       
- 
-        }else{
-
-            mostrarError(4)
-        }
+   
+    nombre.value !== "" && direccion.value !== "" ? fun() : mostrarError(4)
 
 }
+
+function fun(){
+    swal ("Gracias por tu compra", "LLegará en el transcurso de las próximas 72 horas");
+}
+
