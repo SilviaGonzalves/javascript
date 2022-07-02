@@ -301,7 +301,10 @@ h1 {
 .btnF{
     margin-top: 30px;
 }
-
+.info {
+   font-size: 24px;
+   color: "#0A0609";
+}
 
 
 
