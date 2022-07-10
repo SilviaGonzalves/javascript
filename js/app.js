@@ -1,20 +1,6 @@
 
 
-let productos =[
-    {id: 1, nombre: "pintura 1", precio: 400, img: "multimedia/pintura1.jpg"},
-    {id: 2, nombre: "pintura 2", precio: 400, img: "multimedia/pintura2.jpg"},
-    {id: 3, nombre: "pintura 3", precio: 400, img: "multimedia/pintura3.jpg"},
-    {id: 4, nombre: "pintura 4", precio: 400,img: "multimedia/pintura4.jpg"},
-    {id: 5, nombre: "espejo 1", precio: 600, img: "multimedia/espejo1.jpg"},
-    {id: 6, nombre: "espejo 2", precio: 600, img: "multimedia/espejo2.jpg"},
-    {id: 7, nombre: "espejo 3", precio: 600, img: "multimedia/espejo3.jpg"},
-    {id: 8, nombre: "espejo 4", precio: 600, img: "multimedia/espejo4.jpg"},
-    {id: 9, nombre: "accesorio 1", precio: 1200, img: "multimedia/accesorio1.jpg"},
-    {id: 10, nombre: "accesorio 2", precio: 1200, img: "multimedia/accesorio2.jpg"},
-    {id: 11, nombre: "accesorio 3", precio: 1200, img: "multimedia/accesorio3.jpg"},
-    {id: 12, nombre: "accesorio 4", precio: 1200, img: "multimedia/accesorio4.jpg"}
-]
-
+let productos = []
 
 class Carrito {
     constructor (id, nombre, cantidad, valorCompra){
@@ -29,6 +15,8 @@ let carrito =[]
 let reciboCant = 0
 let contArt = 0
 let nada = 0
+let pongo = 0
+let pongoImg = ""
 // selectores
 
 const contenedorProductos = document.querySelector("#contenedor-productos")
@@ -44,7 +32,7 @@ const carritoContenedor = document.querySelector('#carrito-contenedor')
 const precioTotal = document.querySelector('#precioTotal')
 const btnVaciar = document.getElementById('vaciarCarrito')
 const confPedido = document.getElementById('confirmaPedido')
-
+const descripcion = document.getElementById('descripcion')
 
 // decl. selectores modal de Error
 
@@ -53,11 +41,20 @@ const modalCarritoE = document.getElementsByClassName('modal-carritoE')[0]
 const botonCerrarE = document.getElementById('carritoCerrarE')
 const carritoContenedorE = document.querySelector('#carrito-contenedorE')
 
+//  decl. selectores modal publicidad
+const containerInterval = document.querySelector("#container-interval")
+const modalInterval = document.querySelector("#modal-interval")
+
 
 // decl. selector formulario pedido y saludo final
 const formPedido = document.querySelector('#form-pedido')
 const formContenedor = document.getElementsByClassName('form-contenedor')[0]
 
+// decl. selector capturo la cantidad
+const modalContenedorCantidad = document.getElementsByClassName('modal-contenedor-cantidad')[0]
+const modalClaseCantidad = document.getElementsByClassName('modal-clase-cantidad')[0]
+const modalCapturoCantidad = document.querySelector('#modal-capturo-cantidad')
+const btnCapturoCerrar = document.getElementById('btn-capturo-cerrar')
 
 // eventos
 botonAbrir.addEventListener('click', ()=>{
@@ -75,6 +72,9 @@ modalCarrito.addEventListener('click', (event)=>{
 botonCerrarE.addEventListener('click', ()=>{
     contenedorModalE.classList.toggle('modal-active')
 })
+btnCapturoCerrar.addEventListener('click', ()=>{
+    modalContenedorCantidad.classList.toggle('modal-active')
+})
 
 //  recupero de localstorage 
 
@@ -90,82 +90,112 @@ const direccionLS = localStorage.getItem("direccion")
 //  CAPTURAR CANTIDADES 
 //  CARGAR CARRITO
 
-productos.forEach((producto) => {
-    const div = document.createElement("div")
-    div.classList.add("contImg")
-    div.innerHTML=`
-             <img src=${producto.img} alt="fondo" class="imagen" /> 
-             <p class="letraPrecio">Precio producto $${producto.precio}</p>
-             <div class="cantidad">
-                 <p class="letraPrecio">Cantidad</p>
-                 <input type="number" id="${producto.id}" class="campoNumerico" >
-             </div>
-
-    `
-    contenedorProductos.append(div)
-
-    let valor = document.getElementById(`${producto.id}`)
-
-    valor.addEventListener("keypress" , (e)=>{
-
-        if(e.key === "Enter"){
-             if (e.target.id === `${producto.id}`){
-
-                agregoProductos( `${producto.id}`, valor.value)
-
-                 const limpiar = document.getElementById(producto.id)
-                 limpiar.innerHTML = (document.getElementById(producto.id).value = "");
 
 
-                
-             }
-        }
-    })
- })
- 
+fetch('./js/datos.json')
+    .then ((resp) => resp.json())
+    .then ((data) =>{
+      
+            productos = data
 
+            productos.forEach((producto) => {
+                const div = document.createElement("div")
+                div.classList.add("contImg")
+
+                div.innerHTML=`
+                        <img src=${producto.img} alt="fondo" class="imagen" />
+                        <p class="letraPrecio">${producto.nombre}</p>
+                        <p class="letraPrecio">Precio producto $${producto.precio}</p>
+                        <button type="button" class="btn btn-success" id="btn-comprar" onclick="tratarCompra(${producto.id})" >..COMPRAR..</button>
+                     `
+                contenedorProductos.append(div)
+
+             })
+        })
+    
 
 //  FUNCIONES
  
+function revisoLS(id){
+    const veoSiExiste = carrito.find( ind => ind.id === id)
+    veoSiExiste? pongo = veoSiExiste.cantidad:pongo=0
+}
+function tratarCompra(id){
+    const btnComprar = document.querySelector('#btn-comprar')
+    modalContenedorCantidad.classList.toggle('modal-active')
+ 
+    // contenedorModal.addEventListener('click', ()=>{
+    // modalContenedorCantidad.classList.toggle('modal-active')
+    // })
+
+    const buscoImg = productos.find( ind => ind.id === id)
+    buscoImg? pongoImg = buscoImg.img:pongoImg="sin imagen"
+
+    revisoLS(id)
+
+    modalCapturoCantidad.innerHTML = ''
+
+    descripcion.innerHTML=`<strong>Nombre del producto : </strong>${buscoImg.nombre}`
+
+    const div = document.createElement("div")
+    div.classList.add("contImg1")
+
+    div.innerHTML=`
+            <div class= "cantidad">
+                    
+               <img src=${pongoImg} alt="fondo" class="imagen1" /> 
+               <div class = "row rowalineacion">
+                    <button  class="menosmas" onclick="removerDelCarrito(${id})"><i style='font-size:24px' class='fas'>&#xf068;</i></button>
+                    <p id="cant" >${pongo}</p>
+                    <button  class="menosmas" onclick="agregoProductos(${id},1)"><i style='font-size:24px' class='fas'>&#xf067;</i> </button>
+               </div>
+                               
+            </div>
+         `
+    modalCapturoCantidad.append(div)
+    // contenedorModal.addEventListener('click', ()=>{
+    // modalContenedorCantidad.classList.toggle('modal-active')
+    // })
+}
 
 function agregoProductos(item, cantP){
-
     const indice = Number(item)
-    if (parseInt(cantP) < 0){
-       mostrarError(2)
-    }
-    if ((isNaN(parseInt(cantP))) || (parseInt(cantP) < 0)){
-        mostrarError(2)
-    }else{
     const registro = productos.find( el => el.id === indice)
 
     if (registro !== undefined){
         const veoSiExiste = carrito.find( ind => ind.id === registro.id)
         if (veoSiExiste){
-                const cual = carrito.indexOf(veoSiExiste)
-                if (cual === -1){
-                   mostrarError(3)
-                }else{
-                    carrito.splice(cual,1)
-                }
-        } 
-        // console.log(carrito)
-        let valor = cantP * registro.precio 
-        let cantN = Number(cantP)       
-        carrito.push(new Carrito(indice, registro.nombre, cantN, valor))
-     
-        muestroToast(registro.nombre)
-        muestroCarrito()
-        suboLS()
+  
+                    veoSiExiste.cantidad ++
+                    veoSiExiste.valorCompra = veoSiExiste.cantidad * registro.precio 
+                    pongo = veoSiExiste.cantidad
+                
+                    muestroToast(registro.nombre)
+                    muestroCarrito()
+                    suboLS()
+        }else{
+       
+                    let valor = cantP * registro.precio 
+                    let cantN = Number(cantP)       
+                    carrito.push(new Carrito(indice, registro.nombre, cantN, valor))
+                    pongo = 1
+
+                    muestroToast(registro.nombre)
+                    muestroCarrito()
+                    suboLS()
+        }
 
     }else{
         mostrarError(1)
     }
-    // console.log(carrito)
     contarArticulos()
     limpiarCarrito()
     cantArtCompra(contArt) 
-}}
+
+    const cantidad = document.getElementById('cant')
+
+    cantidad.innerHTML=` <p id="cant" >${pongo}</p>`
+}
 
 function muestroToast(producto){
     Toastify({
@@ -180,25 +210,19 @@ function muestroToast(producto){
     }).showToast();
 }
 
-
-
 function mostrarError(codError){
- 
 contenedorModalE.classList.toggle('modal-active')
-
 
 codError === 1?  carritoContenedorE.innerHTML=`Error: no se encontró el índice`: codError === 2?   carritoContenedorE.innerHTML=`Debe ingresar un numero > o igual a 0`: codError === 3?  carritoContenedorE.innerHTML=`Error en splice`: codError === 4?  carritoContenedorE.innerHTML=`Debe ingresar Nombre y Direccion` : nada = 0
 }
-
 
 function contarArticulos() {
     contArt = 0
     carrito.forEach((item) => {
         const convCant = Number(item.cantidad)
         contArt += convCant
-        
+     
     })
- 
 }
 function limpiarCarrito(){
     let i = 0
@@ -210,12 +234,9 @@ function limpiarCarrito(){
          }}
     })
 }
-
-
 const cantArtCompra = (contArt) => {
     contadorCarrito.innerText = contArt
 }
-
 
 function muestroCarrito  ()  {
         carritoContenedor.innerHTML = ''
@@ -250,34 +271,36 @@ const removerDelCarrito = (id) => {
     const item = carrito.find((producto) => producto.id === id)
     const itemP = productos.find((ele) => ele.id === id)
 
-    item.cantidad -= 1
-    item.valorCompra = item.cantidad * itemP.precio
+    if (item !== undefined){
+        if (item.cantidad > 0){
+            item.cantidad -= 1
+            item.valorCompra = item.cantidad * itemP.precio
+            Toastify({
+                text: `Se eliminó 1 unidad de ${item.nombre}`,
+                position: 'right',
+                gravity: 'bottom',
+                duration: 5000,
+                style: {
+                    background: "linear-gradient(to right, #D48AD4, #B85898)",
+                }
+            }).showToast()
 
-
-    if (item.cantidad === 0) {
-        const indice = carrito.indexOf(item)
-        carrito.splice(indice, 1)
-    }
+            suboLS()
+            muestroCarrito()
+            contarArticulos()
+            cantArtCompra(contArt) 
+            pongo = item.cantidad
+            const cantidad = document.getElementById('cant')
     
-    Toastify({
-        text: `Se eliminó 1 unidad de ${item.nombre}`,
-        position: 'right',
-        gravity: 'bottom',
-        duration: 5000,
-        style: {
-            background: "linear-gradient(to right, #D48AD4, #B85898)",
-          }
-    }).showToast()
+            cantidad.innerHTML=` <p id="cant" >${pongo}</p>`
+        }
 
-    // localStorage.setItem('carrito', JSON.stringify(carrito))
-    suboLS()
-    muestroCarrito()
-    contarArticulos()
-    cantArtCompra(contArt)    
+        if (item.cantidad === 0){
+            const indice = carrito.indexOf(item)
+            carrito.splice(indice, 1)
+        }
 }
-
-
-
+}
 function vaciarCarrito () {
 
     Swal.fire({
@@ -308,7 +331,6 @@ function vaciarCarrito () {
         }
       })
 
-
 }
 function confirmaPedido(){
     contenedorModal.classList.toggle('modal-active')
@@ -337,10 +359,7 @@ function confirmaPedido(){
     formPedido.append(form)
 
 }
-
-
 function asentarConfirmacion(){
-
     formContenedor.classList.toggle('modal-active')
     let nombre = document.querySelector('#inputNombre')
     const direccion = document.querySelector('#inputDireccion')
@@ -354,10 +373,6 @@ function asentarConfirmacion(){
     }else{
           mostrarError(4)
     }
-
-    // (nombre.value !== "" && direccion.value !== "" )? (fun()), ( localStorage.setItem("nombre", nombre.value)), (localStorage.setItem("direccion", direccion.value)), (suboLS()) :  mostrarError(4)
-
-
 }
 function fun(){
     Swal.fire({
@@ -386,3 +401,21 @@ if (carritoJS){
 function eliminoDeLS(){
     localStorage.clear(carrito)
 }
+
+/////   mostrar pulicidad
+setInterval(saludar, 6000);
+
+function saludar() {
+Toastify({
+    text: `
+              P R O X I M A M E N T E
+                 Cursos de Manicuría   `,
+    position: 'center',
+    gravity: 'top',
+    duration: 3000,
+    style: {
+    background: "linear-gradient(to right, #3604445, #090D0B)",
+    height: '12%',
+    width: '40%',
+    }
+}).showToast()}
